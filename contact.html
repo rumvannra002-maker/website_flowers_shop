@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — FLOWER & SMILE</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <style>
+    /* ── Footer Social Icons ── */
+    .footer-socials {
+      display: flex;
+      gap: 24px;
+      margin-top: 15px;
+      align-items: center;
+    }
+    .footer-socials a {
+      color: rgba(255, 255, 255, 0.8) !important;
+      font-size: 1.3rem !important;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+      width: auto !important;
+      height: auto !important;
+    }
+    .footer-socials a:hover {
+      color: #c97b6a !important;
+      transform: translateY(-2px);
+    }
+
+    /* Remove underline/border from footer headings */
+    .footer-heading::after,
+    .footer-col h3::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    /* Line spacing for footer links */
+    .footer-links li,
+    .footer-contact li {
+      margin-bottom: 16px !important;
+    }
+    .footer-links li:last-child,
+    .footer-contact li:last-child {
+      margin-bottom: 0 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       NAVIGATION BAR SECTION
+       ========================================== -->
+  <nav>
+    <div class="nav-logo">FLOWER & SMILE</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="occasions.html">Occasions</a></li>
+      <li><a href="flowers.html">Flowers</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html" class="active">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- ==========================================
+       CONTACT PAGE CONTENT
+       ========================================== -->
+  <div class="page active">
+    
+    <!-- Page Header (Title & Subtitle) -->
+    <div class="page-header">
+      <p class="section-label">Get in Touch</p>
+      <h1 class="section-title">We'd Love to<br>Hear from <em>You</em></h1>
+      <div class="divider"></div>
+      <p style="font-size:0.88rem; color:#777; font-weight:300; max-width:480px; line-height:1.9;">
+        Contact us — We are happy to help you.
+      </p>
+    </div>
+
+    <!-- Main Contact Layout Section -->
+    <div class="section" style="padding-top:20px;">
+      <div class="contact-layout">
+
+        <!-- Shop Information Side (Address, Phone, Email, Hours) -->
+        <div class="contact-info">
+          <h3>Visit Our Shop</h3>
+          <p>The shop is open every day and welcomes customers to choose.</p>
+
+          <!-- Address Item -->
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div class="contact-item-text">
+              <label>Address</label>
+              <span>St. 214, Phnom Penh, Cambodia</span>
+            </div>
+          </div>
+          
+          <!-- Phone Item -->
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div class="contact-item-text">
+              <label>Phone</label>
+              <span>+855 12 345 678</span>
+            </div>
+          </div>
+          
+          <!-- Email Item -->
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div class="contact-item-text">
+              <label>Email</label>
+              <span>hello@flowersmile.kh</span>
+            </div>
+          </div>
+          
+          <!-- Working Hours Item -->
+          <div class="contact-item">
+            <div class="contact-icon">🕐</div>
+            <div class="contact-item-text">
+              <label>Hours</label>
+              <span>Mon–Sat: 7:00 AM – 7:00 PM<br>Sun: 8:00 AM – 5:00 PM</span>
+            </div>
+          </div>
+
+          <!-- Google Maps Embed Section -->
+          <div style="margin-top:30px; height:250px; width:100%; overflow:hidden; border-radius:4px;">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.7706775519395!2d104.9182312!3d11.5611145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3block!2sSt+214%2C+Phnom+Penh!5e0!3m2!1skm!2skh!4v1718900000000!5m2!1skm!2skh" 
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+
+        <!-- Interactive Contact Form Side -->
+        <div class="contact-form">
+          <div class="form-title">Send a Message</div>
+          <div class="form-sub">We'll get back to you within 24 hours</div>
+
+          <!-- Name Inputs Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" placeholder="Vannra" id="fname" />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" placeholder="Rum" id="lname" />
+            </div>
+          </div>
+
+          <!-- Email Input -->
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="you@example.com" id="email" />
+          </div>
+
+          <!-- Occasion Selection Dropdown -->
+          <div class="form-group">
+            <label>Occasion</label>
+            <select id="occasion">
+              <option value="">— Select Occasion —</option>
+              <option>Wedding</option>
+              <option>Birthday</option>
+              <option>Valentine's Day</option>
+              <option>Graduation</option>
+              <option>Sympathy</option>
+              <option>Housewarming</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <!-- Message Textarea -->
+          <div class="form-group">
+            <label>Your Message</label>
+            <textarea placeholder="Tell us about your flower needs..." id="message"></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button class="submit-btn" onclick="submitForm()">Send Message →</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       FOOTER SECTION
+       ========================================== -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      
+      <!-- Footer Column 1: Brand Info & Social Media Links -->
+      <div class="footer-col footer-about">
+        <div class="footer-logo">FLOWER & SMILE</div>
+        <p class="footer-tagline">Exquisite floral arrangements crafted to bring smiles, warmth, and timeless elegance to your every special moment.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+
+      <!-- Footer Column 2: Navigation Links -->
+      <div class="footer-col">
+        <h3 class="footer-heading">Explore</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="occasions.html">Occasions</a></li>
+          <li><a href="flowers.html">Our Flowers</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Footer Column 3: Quick Contact Details -->
+      <div class="footer-col">
+        <h3 class="footer-heading">Contact Us</h3>
+        <ul class="footer-contact">
+          <li><span>📍</span> Phnom Penh, Cambodia</li>
+          <li><span>📞</span> +855 12 345 678</li>
+          <li><span>✉️</span> info@flowersmile.com</li>
+          <li><span>🕒</span> Mon - Sun: 8:00 AM - 8:00 PM</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Footer Bottom: Copyright Info -->
+    <div class="footer-bottom">
+      <p>&copy; 2026 <span>FLOWER & SMILE</span> · All rights reserved by Bloom & Petal</p>
+    </div>
+  </footer>
+
+  <!-- External JavaScript File Reference -->
+  <script src="main.js"></script>
+</body>
+</html>

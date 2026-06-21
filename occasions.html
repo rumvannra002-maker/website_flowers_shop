@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Occasions — FLOWER & SMILE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  
+  <!-- បន្ថែម Style បន្តិចត្រង់នេះ ដើម្បីឱ្យផ្កាហោះគ្របដណ្តប់ពេញផ្ទៃខាងក្រោយនៃទំព័រ -->
+  <style>
+
+    /* ── CSS-Only Filter ── */
+    .filter-radio { display: none; }
+
+    .flower-card {
+      animation: fadeUp 0.4s ease forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Active label */
+    #filter-all:checked       ~ .section .filter-btn[for="filter-all"],
+    #filter-Wedding:checked     ~ .section .filter-btn[for="filter-Wedding"],
+    #filter-Birthday:checked ~ .section .filter-btn[for="filter-Birthday"],
+    #filter-Valentine:checked ~ .section .filter-btn[for="filter-Valentine"],
+    #filter-Anniversary:checked      ~ .section .filter-btn[for="filter-Anniversary"],
+    #filter-Graduation:checked ~ .section .filter-btn[for="filter-Graduation"],
+    #filter-Housewarming:checked     ~ .section .filter-btn[for="filter-Housewarming"], 
+    #filter-Baby:checked      ~ .section .filter-btn[for="filter-Baby"],
+    #filter-Thank:checked ~ .section .filter-btn[for="filter-Thank"],
+    #filter-Sorry:checked     ~ .section .filter-btn[for="filter-Sorry"] {
+      background: #c97b6a;
+      color: #fff;
+      border-color: #c97b6a;
+    }
+
+    /* Hide all cards when a specific filter is active */
+    #filter-Wedding:checked     ~ .section .flower-card,
+    #filter-Birthday:checked ~ .section .flower-card,
+    #filter-Valentine:checked ~ .section .flower-card,
+    #filter-Anniversary:checked      ~ .section .flower-card,
+    #filter-Graduation:checked ~ .section .flower-card,
+    #filter-Housewarming:checked     ~ .section .flower-card,
+    #filter-Baby:checked      ~ .section .flower-card,
+    #filter-Thank:checked ~ .section .flower-card,
+    #filter-Sorry:checked     ~ .section .flower-card {
+      display: none;
+    }
+
+    /* Show only matching category */
+    #filter-Wedding:checked     ~ .section .flower-card[data-cat="Wedding"]     { display: block; }
+    #filter-Birthday:checked ~ .section .flower-card[data-cat="Birthday"] { display: block; }
+    #filter-Valentine:checked ~ .section .flower-card[data-cat="Valentine"] { display: block; }
+    #filter-Anniversary:checked      ~ .section .flower-card[data-cat="Anniversary"]      { display: block; }
+    #filter-Graduation:checked ~ .section .flower-card[data-cat="Graduation"] { display: block; }
+    #filter-Housewarming:checked     ~ .section .flower-card[data-cat="Housewarming"]     { display: block; }
+    #filter-Baby:checked      ~ .section .flower-card[data-cat="Baby"]      { display: block; }
+    #filter-Thank:checked ~ .section .flower-card[data-cat="Thank"] { display: block; }
+    #filter-Sorry:checked     ~ .section .flower-card[data-cat="Sorry"]     { display: block; }
+
+    .page.active {
+      position: relative;
+      overflow: hidden; /* ការពារកុំឱ្យចេញ Scrollbar ពេលផ្កាហោះធ្លាក់ហួសគែមអេក្រង់ */
+    }
+    .hero-petals {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* ធានាថាផ្កាមិនបាំងការចុច Click លើ Card ផ្កាឡើយ */
+      z-index: 0;
+    }
+    .page-header, .section {
+      position: relative;
+      z-index: 1; /* រុញមាតិកា និងកាតផ្កាឱ្យនៅពីលើស្រទាប់ផ្កាហោះ */
+    }
+    /* សរសេរកូដជំនួសរូបភាព Background ករណីមិនចង់សរសេរក្នុង CSS File ខាងក្រៅ */
+    .occasion-card-bg {
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: transform 0.5s ease;
+    }
+    .occasion-card:hover .occasion-card-bg {
+      transform: scale(1.1);
+    }
+
+    /* ── Footer Social Icons ── */
+.footer-socials {
+  display: flex;
+  gap: 24px;
+  margin-top: 15px;
+  align-items: center;
+}
+.footer-socials a {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 1.3rem !important;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+.footer-socials a:hover {
+  color: #c97b6a !important;
+  transform: translateY(-2px);
+}
+
+/* លុបបន្ទាត់ (-) ពីក្រោមចំណងជើង */
+.footer-heading::after,
+.footer-col h3::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* គម្លាតបន្ទាត់ footer links */
+.footer-links li,
+.footer-contact li {
+  margin-bottom: 16px !important;
+}
+.footer-links li:last-child,
+.footer-contact li:last-child {
+  margin-bottom: 0 !important;
+}
+
+.page.active {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-petals {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .section {
+      position: relative;
+      z-index: 1;
+    }
+    .flower-img {
+      width: 100%;
+      height: 280px;
+      object-fit: contain;
+      object-position: bottom;
+      background-color: #fcf9f6;
+      display: block;
+    }
+
+    /* ── Buy Now Button ── */
+    .buy-btn {
+      background: #c97b6a;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.15s ease;
+      white-space: nowrap;
+    }
+    .buy-btn:hover {
+      background: #b56758;
+      transform: translateY(-1px);
+    }
+    .buy-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ── Modal Overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      font-family: 'Jost', sans-serif;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Modal Header */
+    .modal-header {
+      background: linear-gradient(135deg, #c97b6a 0%, #e8a898 100%);
+      padding: 20px 24px 16px;
+      color: #fff;
+      position: relative;
+    }
+    .modal-header h2 {
+      margin: 0 0 2px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    .modal-header .modal-flower-name {
+      font-size: 0.82rem;
+      opacity: 0.88;
+      font-style: italic;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 18px;
+      background: rgba(255,255,255,0.25);
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.4); }
+
+    /* Order Summary */
+    .modal-summary {
+      padding: 16px 24px;
+      border-bottom: 1px solid #f0ebe8;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .modal-summary img {
+      width: 64px; height: 64px;
+      object-fit: contain;
+      background: #fcf9f6;
+      border-radius: 10px;
+      border: 1px solid #ede8e5;
+    }
+    .modal-summary-info .s-name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #2c2825;
+      margin-bottom: 2px;
+    }
+    .modal-summary-info .s-meaning {
+      font-size: 0.78rem;
+      color: #9b8f8a;
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .modal-summary-info .s-price {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #c97b6a;
+    }
+
+    /* Qty Row */
+    .modal-qty-row {
+      padding: 12px 24px;
+      border-bottom: 1px solid #f0ebe8;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-qty-row label {
+      font-size: 0.82rem;
+      color: #6b5f5c;
+      flex: 1;
+    }
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #d4bfba;
+      background: #fdf8f6;
+      color: #c97b6a;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .qty-btn:hover { background: #f5e8e5; }
+    .qty-num {
+      font-size: 0.95rem;
+      font-weight: 500;
+      min-width: 24px;
+      text-align: center;
+    }
+    .modal-total {
+      font-size: 0.9rem;
+      color: #2c2825;
+    }
+    .modal-total span { color: #c97b6a; font-weight: 500; }
+
+    /* Payment Methods */
+    .modal-body {
+      padding: 16px 24px 20px;
+    }
+    .modal-body h3 {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9b8f8a;
+      margin: 0 0 12px;
+    }
+    .payment-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .pay-method {
+      border: 1.5px solid #ede8e5;
+      border-radius: 10px;
+      padding: 12px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+      background: #fdfcfb;
+    }
+    .pay-method:hover { border-color: #c97b6a; background: #fdf5f3; }
+    .pay-method.selected {
+      border-color: #c97b6a;
+      background: #fdf5f3;
+    }
+    .pay-method .pm-icon {
+      font-size: 1.6rem;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .pay-method .pm-name {
+      font-size: 0.75rem;
+      color: #4a3f3c;
+      font-weight: 500;
+    }
+    .pay-method .pm-sub {
+      font-size: 0.68rem;
+      color: #9b8f8a;
+      margin-top: 1px;
+    }
+
+    /* ABA / KHQR specific colors */
+    .pay-aba .pm-icon { color: #004B87; }
+    .pay-wing .pm-icon { color: #e8a000; }
+    .pay-acleda .pm-icon { color: #1a6b3c; }
+    .pay-cash .pm-icon { color: #888; }
+
+    /* KHQR Panel */
+    .khqr-panel {
+      display: none;
+      padding: 0 24px 16px;
+      text-align: center;
+      border-top: 1px solid #f0ebe8;
+    }
+    .khqr-panel.show { display: block; }
+    .khqr-panel p.khqr-label {
+      font-size: 0.78rem;
+      color: #9b8f8a;
+      margin: 12px 0 10px;
+    }
+    .khqr-qr-wrap {
+      display: inline-block;
+      padding: 12px;
+      background: #fff;
+      border: 2px solid #e0d8d5;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .khqr-qr-wrap canvas { display: block; }
+    .khqr-qr-wrap img { display: block; width: 160px; height: 160px; }
+    .khqr-amount {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #c97b6a;
+      margin-bottom: 4px;
+    }
+    .khqr-note {
+      font-size: 0.72rem;
+      color: #b0a09c;
+      line-height: 1.6;
+    }
+    .khqr-bank-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .khqr-bank-badge.aba  { background: #e6eef6; color: #004B87; }
+    .khqr-bank-badge.wing { background: #fef7e0; color: #a07000; }
+    .khqr-bank-badge.acleda { background: #e4f4ec; color: #1a6b3c; }
+
+    /* Confirm Button */
+    .btn-confirm {
+      width: 100%;
+      background: #c97b6a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .btn-confirm:hover { background: #b56758; }
+    .btn-confirm:disabled { background: #d4bfba; cursor: not-allowed; }
+
+    /* Success screen */
+    .modal-success {
+      display: none;
+      padding: 36px 24px;
+      text-align: center;
+    }
+    .modal-success .success-icon {
+      font-size: 3rem;
+      color: #5cb85c;
+      margin-bottom: 12px;
+    }
+    .modal-success h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #2c2825;
+      margin-bottom: 6px;
+    }
+    .modal-success p {
+      font-size: 0.85rem;
+      color: #9b8f8a;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    /* Footer Socials */
+    .footer-socials {
+      display: flex;
+      gap: 24px;
+      margin-top: 15px;
+      align-items: center;
+    }
+    .footer-socials a {
+      color: rgba(255,255,255,0.8) !important;
+      font-size: 1.3rem !important;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+      width: auto !important;
+      height: auto !important;
+    }
+    .footer-socials a:hover {
+      color: #c97b6a !important;
+      transform: translateY(-2px);
+    }
+    .footer-heading::after, .footer-col h3::after { display: none !important; content: none !important; }
+    .footer-links li, .footer-contact li { margin-bottom: 16px !important; }
+    .footer-links li:last-child, .footer-contact li:last-child { margin-bottom: 0 !important; }
+ 
+
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"> FLOWER & SMILE </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="occasions.html" class="active">Occasions</a></li>
+    <li><a href="flowers.html">Flowers</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- OCCASIONS PAGE -->
+<div class="page active">
+  
+  <!-- 1. បន្ថែមប្រអប់ផ្ទុកផ្កាហោះនៅត្រង់នេះ (ដូច Home Page ដែរ) -->
+  <div class="hero-petals" id="petals"></div>
+
+  <div class="page-header">
+    <p class="section-label">Shop by Occasion</p>
+    <h1 class="section-title">Perfect Flowers<br>for Every <em>Moment</em></h1>
+    <div class="divider"></div>
+    <p style="font-size:0.88rem; color:#777; font-weight:300; max-width:480px; line-height:1.9;">
+      Special day, choose the most suitable flowers.
+    </p>
+  </div>
+
+  <div class="section" style="padding-top: 0;">
+    <div class="occasions-grid">
+      
+      <!-- 1. Wedding -->
+      <a href="#wedding-modal" class="occasion-card occ-1">
+  <div class="occasion-card-bg"
+       style="background-image:url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop');">
+  </div>
+
+  <div class="occasion-overlay">
+    <div class="occasion-name">Wedding</div>
+    <div class="occasion-desc">Elegant arrangements for your big day</div>
+  </div>
+</a>
+
+      <!-- 2. Birthday -->
+      <div class="occasion-card occ-2">
+        <div class="occasion-card-bg" style="background-image: url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=600&auto=format&fit=crop');"></div>
+          <div class="occasion-overlay">
+          <div class="occasion-name">Birthday</div>
+          <div class="occasion-desc">Bright & joyful blooms to celebrate</div>
+        </div>
+      </div>
+
+      <!-- 3. Valentine's Day -->
+      <div class="occasion-card occ-3">
+        <div class="occasion-card-bg" style="background-image: url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=600&auto=format&fit=crop');"></div>
+         <div class="occasion-tag">Bestseller</div>
+        <div class="occasion-overlay">
+          <div class="occasion-name">Valentine's Day</div>
+          <div class="occasion-desc">Express your love with timeless roses</div>
+        </div>
+      </div>
+
+    <!-- 5. Anniversary -->
+    <div class="occasion-card occ-anniversary">
+      <div class="occasion-card-bg" style="background-image: url('https://www.blossominggifts.com/blog/wp-content/uploads/2023/10/anniversary-flowers-by-year.jpg');"></div>
+      <div class="occasion-overlay">
+      <div class="occasion-name">Anniversary</div>
+      <div class="occasion-desc">Celebrate your beautiful years together</div>
+  </div>
+</div>
+
+
+      <!-- 4. Graduation -->
+      <div class="occasion-card occ-4">
+        <div class="occasion-card-bg" style="background-image: url('https://dailyblooms.com.au/cdn/shop/articles/Graduation_01_69b99390-7b6c-48ae-9887-578caf6ac02d.png?v=1761780835');"></div>
+        <div class="occasion-overlay">
+          <div class="occasion-name">Graduation</div>
+          <div class="occasion-desc">Celebrate their achievement in bloom</div>
+        </div>
+      </div>
+
+      <!-- 6. Housewarming -->
+      <div class="occasion-card occ-6">
+        <div class="occasion-card-bg" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=600&auto=format&fit=crop');"></div>
+        <div class="occasion-overlay">
+          <div class="occasion-name">Housewarming</div>
+          <div class="occasion-desc">Warm & welcoming floral gifts</div>
+        </div>
+      </div>
+
+      <!-- 7. New Baby (កែប្រែលេខថ្នាក់ និងរូបភាព) -->
+      <div class="occasion-card occ-7">
+        <div class="occasion-card-bg" style="background-image: url('https://images.unsplash.com/photo-1555252333-9f8e92e65df9?q=80&w=600&auto=format&fit=crop');"></div>
+        <div class="occasion-overlay">
+          <div class="occasion-name">New Baby</div>
+          <div class="occasion-desc">Sweet and delicate bouquets for the little one</div>
+        </div>
+      </div>
+
+      <!-- 8. Thank You (កែប្រែលេខថ្នាក់ និងរូបភាព) -->
+      <div class="occasion-card occ-8">
+        <div class="occasion-card-bg" style="background-image: url('https://img.magnific.com/free-vector/thank-you-card-with-purple-green-floral-watercolor_65186-2732.jpg');"></div>
+        <div class="occasion-overlay">
+          <div class="occasion-name">Thank You</div>
+          <div class="occasion-desc">Show your deep gratitude with fresh blossoms</div>
+        </div>
+      </div>
+
+      <!-- 9. I'm Sorry (កែប្រែលេខថ្នាក់ បិទ Tag ឱ្យត្រូវ និងដាក់រូបភាព) -->
+      <div class="occasion-card occ-9">
+        <div class="occasion-card-bg" style="background-image: url('https://www.shutterstock.com/image-photo/sorry-card-beautiful-flowers-on-600nw-2510890125.jpg');"></div>
+        <div class="occasion-overlay">
+          <div class="occasion-name">I'm Sorry</div>
+          <div class="occasion-desc">Sincere flowers to mend and heal hearts</div>
+        </div>
+      </div>
+
+    </div> <!-- បិទ occasions-grid ត្រឹមត្រូវ -->
+<!-- ═══════════════════════════════════════════
+     PAYMENT MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="payModal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2>Complete Your Order</h2>
+      <div class="modal-flower-name" id="modalFlowerMeaning"></div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+
+    <!-- Main content (order + payment) -->
+    <div id="modalMain">
+      <!-- Order Summary -->
+      <div class="modal-summary">
+        <img id="modalFlowerImg" src="" alt="flower" />
+        <div class="modal-summary-info">
+          <div class="s-name" id="modalFlowerName"></div>
+          <div class="s-meaning" id="modalFlowerMeaning2"></div>
+          <div class="s-price" id="modalFlowerPrice"></div>
+        </div>
+      </div>
+
+      <!-- Qty -->
+      <div class="modal-qty-row">
+        <label>Quantity</label>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-num" id="qtyNum">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <div class="modal-total">Total: <span id="modalTotal"></span></div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="modal-body">
+        <h3>Choose Payment</h3>
+        <div class="payment-methods">
+
+          <div class="pay-method pay-aba" onclick="selectPay(this,'ABA Bank')" data-method="ABA Bank">
+            <span class="pm-icon"><i class="fa-solid fa-building-columns"></i></span>
+            <div class="pm-name">ABA Bank</div>
+            <div class="pm-sub">KHQR / Transfer</div>
+          </div>
+
+          <div class="pay-method pay-wing" onclick="selectPay(this,'Wing Bank')" data-method="Wing Bank">
+            <span class="pm-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+            <div class="pm-name">Wing Bank</div>
+            <div class="pm-sub">Mobile Money</div>
+          </div>
+
+          <div class="pay-method pay-acleda" onclick="selectPay(this,'ACLEDA Bank')" data-method="ACLEDA Bank">
+            <span class="pm-icon"><i class="fa-solid fa-credit-card"></i></span>
+            <div class="pm-name">ACLEDA</div>
+            <div class="pm-sub">Card / Transfer</div>
+          </div>
+
+          <div class="pay-method pay-cash" onclick="selectPay(this,'Cash on Delivery')" data-method="Cash on Delivery">
+            <span class="pm-icon"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+            <div class="pm-name">Cash</div>
+            <div class="pm-sub">Pay on Delivery</div>
+          </div>
+
+        </div>
+
+        <!-- KHQR Panel REMOVED - now in separate QR modal -->
+
+        <button class="btn-confirm" id="btnConfirm" onclick="confirmOrder()" disabled>
+          Confirm Order
+        </button>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <h3>Order Placed! 🌸</h3>
+      <p id="successMsg"></p>
+      <button class="btn-confirm" onclick="closeModal()">Close</button>
+    </div>
+
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════
+     QR CODE MODAL (separate)
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="qrModal" onclick="closeQROutside(event)">
+  <div class="modal-box" style="max-width:320px;">
+    <div class="modal-header" id="qrModalHeader">
+      <h2 id="qrModalTitle">Scan to Pay</h2>
+      <div class="modal-flower-name" id="qrModalSub"></div>
+      <button class="modal-close" onclick="closeQR()">✕</button>
+    </div>
+    <div style="padding:24px; text-align:center;">
+      <div style="display:inline-block; padding:14px; background:#fff; border:2px solid #e0d8d5; border-radius:14px; margin-bottom:16px;">
+        <div id="qrCodeDiv"></div>
+      </div>
+      <div style="font-size:1.15rem; font-weight:500; color:#c97b6a; margin-bottom:6px;" id="qrModalAmount"></div>
+      <div style="font-size:0.75rem; color:#b0a09c; line-height:1.7;">Open your banking app → Scan QR<br>Payment will be confirmed automatically</div>
+      <button class="btn-confirm" style="margin-top:18px;" onclick="afterQRPaid()">I've Paid ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="page active">
+  
+  <div class="hero-petals" id="petals"></div>
+
+  <div class="page-header">
+    <p class="section-label">Our Collection</p>
+    <h1 class="section-title">Flower in Prepartion<br><em>for Special</em> occaions</h1>
+    <div class="divider"></div>
+    <p style="font-size:0.88rem; color:#777; font-weight:300; max-width:480px; line-height:1.9;">
+      Fresh blooms, hand-tied bouquets, and endless smiles.
+    </p>
+  </div>
+
+  <!-- ══ CSS-Only Filter Radio Inputs (must be sibling of .section) ══ -->
+  <input type="radio" name="flower-filter" id="filter-all"       class="filter-radio" checked>
+  <input type="radio" name="flower-filter" id="filter-Wedding"     class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Birthday" class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Valentine" class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Anniversary"      class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Graduation" class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Housewarming"     class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Baby"      class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Thank" class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-Sorry"     class="filter-radio">
+
+  <div class="section" style="padding-top:0;">
+    <!-- Filter Bar — labels instead of buttons -->
+    <div class="filter-bar">
+      <label class="filter-btn" for="filter-all">All Flowers</label>
+      <label class="filter-btn" for="filter-Wedding">Wedding</label>
+      <label class="filter-btn" for="filter-Birthday">Birthday</label>
+      <label class="filter-btn" for="filter-Valentine">Valentine's Day</label>
+      <label class="filter-btn" for="filter-Anniversary">Anniversary</label>
+      <label class="filter-btn" for="filter-Graduation">Graduation</label>
+      <label class="filter-btn" for="filter-Housewarming">Housewarming</label>
+      <label class="filter-btn" for="filter-Baby">New Baby</label>
+      <label class="filter-btn" for="filter-Thank">Thank You</label>
+      <label class="filter-btn" for="filter-Sorry">I'm Sorry</label>
+
+    </div>
+
+    <div class="flowers-grid" id="flowersGrid">
+
+      <!-- ── Anniversary ── -->
+     
+      <div class="flower-card" data-cat="Anniversary">
+        <img class="flower-img" src="https://i.pinimg.com/736x/7a/97/0a/7a970a3bfee9771440f592a53da1f3e0.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">love you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flower-card" data-cat="Anniversary">
+        <img class="flower-img" src="https://i.pinimg.com/736x/1e/0f/0d/1e0f0d237e55d3f00d1beb07c7cd83b7.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Rose</div>
+          <div class="flower-meaning">love you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$80.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Anniversary">
+        <img class="flower-img" src="https://i.pinimg.com/736x/cd/b9/a7/cdb9a7f91c9aaf36946b0abe8b1d5528.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Rose</div>
+          <div class="flower-meaning">love you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$80.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Anniversary">
+        <img class="flower-img" src="https://i.pinimg.com/736x/75/45/a9/7545a9496c8edec56e26750afa18e230.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">love you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$40.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+     
+      <!-- ── Thank You ── -->
+       
+      <div class="flower-card" data-cat="Thank">
+        <img class="flower-img" src="https://i.pinimg.com/736x/21/e3/e7/21e3e7a319ae083f6e8b68067561c625.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Thank you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Thank">
+        <img class="flower-img" src="https://i.pinimg.com/736x/5b/c6/6a/5bc66ad626c2c21d993520aeffb97ac3.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Blue Flower</div>
+          <div class="flower-meaning">Thank you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Thank">
+        <img class="flower-img" src="https://i.pinimg.com/736x/f1/fb/f0/f1fbf0dfb0aef6cc47a9ea42a223a0db.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Purple Flower</div>
+          <div class="flower-meaning">Thank you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="flower-card" data-cat="Thank">
+        <img class="flower-img" src="https://i.pinimg.com/736x/b4/41/71/b441714ad9dea6e9e0a9b445967db6e9.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Flower</div>
+          <div class="flower-meaning">Thank you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ── New Baby ── -->
+
+      <div class="flower-card" data-cat="Baby">
+        <img class="flower-img" src="https://i.pinimg.com/736x/82/f2/47/82f247eec318bec9fc5ebae6752a5df4.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Welcome new members</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Baby">
+        <img class="flower-img" src="https://i.pinimg.com/736x/64/5f/85/645f850b2cf7b2a35e0798b660cce3da.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Welcome new members</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Baby">
+        <img class="flower-img" src="https://i.pinimg.com/736x/bc/53/3d/bc533dc50eac771e2c2d7879cf5e5c24.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Welcome new members</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Baby">
+        <img class="flower-img" src="https://i.pinimg.com/1200x/16/28/48/16284806365e00411f242e95ead7f644.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Welcome new members</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <!-- ── Sorry ── -->
+
+      <div class="flower-card" data-cat="Sorry">
+        <img class="flower-img" src="https://i.pinimg.com/736x/4e/c0/c8/4ec0c8e16be6bad87388c380d12d6de4.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">I'm Sorry</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Sorry">
+        <img class="flower-img" src="https://i.pinimg.com/1200x/84/6e/e6/846ee6778f0b59730c635895f35244b1.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Yellow Rose</div>
+          <div class="flower-meaning">I'm Sorry</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Sorry">
+        <img class="flower-img" src="https://i.pinimg.com/736x/45/07/1d/45071de729bd76caf55de1264425699e.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">I'm Sorry</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Sorry">
+        <img class="flower-img" src="https://i.pinimg.com/1200x/ee/fc/fc/eefcfc7959f684eefa505b56c0b360a5.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">I'm Sorry</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Housewarming ── -->
+
+      <div class="flower-card" data-cat="Housewarming">
+        <img class="flower-img" src="https://i.pinimg.com/736x/d8/ce/11/d8ce111f39ed05c2e072016f4e4916df.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Home freash</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Housewarming">
+        <img class="flower-img" src="https://i.pinimg.com/1200x/43/dd/05/43dd05ee16fad82bc33caa2bcdea7102.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Home freash</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Housewarming">
+        <img class="flower-img" src="https://i.pinimg.com/1200x/44/0d/ed/440ded7df41078850dd8c7fdc615cea3.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Home freash</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Housewarming">
+        <img class="flower-img" src="https://i.pinimg.com/736x/19/05/fb/1905fbcc0d72001f7a59385a126e0103.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">Home freash</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Valentine ── -->
+     
+      <div class="flower-card" data-cat="Valentine">
+        <img class="flower-img" src="https://i.pinimg.com/736x/84/dd/7b/84dd7b5d24a68733844fa1333ad2a04e.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Flower</div>
+          <div class="flower-meaning">my love</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Valentine">
+        <img class="flower-img" src="https://i.pinimg.com/736x/b9/52/b8/b952b81203c712bc9e818cc5cfc53393.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">my love</div>
+          <div class="flower-footer">
+            <div class="flower-price">$50.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Valentine">
+        <img class="flower-img" src="https://i.pinimg.com/736x/a4/02/28/a402284042e9fddba3af3f980b703779.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Flower</div>
+          <div class="flower-meaning">my love</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Valentine">
+        <img class="flower-img" src="https://i.pinimg.com/736x/6d/c9/b4/6dc9b4a0cff13bc941fc69da1aab2e72.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Colorful Flower</div>
+          <div class="flower-meaning">my love</div>
+          <div class="flower-footer">
+            <div class="flower-price">$50.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- ── Wedding ── -->
+     
+      <div class="flower-card" data-cat="Wedding">
+        <img class="flower-img" src="https://i.pinimg.com/736x/57/f7/44/57f7448c38d17e10fd47e899c59fbed0.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Flower</div>
+          <div class="flower-meaning">my special day</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Wedding">
+        <img class="flower-img" src="https://i.pinimg.com/736x/eb/8f/2d/eb8f2d7a57015ba0b193183384317265.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">White Flower</div>
+          <div class="flower-meaning">my special day</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Wedding">
+        <img class="flower-img" src="https://i.pinimg.com/736x/6b/2b/ae/6b2bae7a0c4706c9414363ec94939f06.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Flower</div>
+          <div class="flower-meaning">my special day</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Wedding">
+        <img class="flower-img" src="https://i.pinimg.com/1200x/14/2d/6a/142d6a47775772c84052c4002a0b7a14.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">White Flower</div>
+          <div class="flower-meaning">my special day</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+     
+      <!-- ── Graduation ── -->
+
+      <div class="flower-card" data-cat="Graduation">
+        <img class="flower-img" src="https://i.pinimg.com/originals/76/a7/77/76a7775fc34792eac951b5790260b114.png" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Flower</div>
+          <div class="flower-meaning">my friend</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Graduation">
+        <img class="flower-img" src="https://i.pinimg.com/originals/5b/1d/75/5b1d7593aa26f5d0061e08aae7a76d18.png" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">Good student</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Graduation">
+        <img class="flower-img" src="https://i.pinimg.com/originals/1c/0c/5c/1c0c5cffc2e053090cf4852c4e2c6992.png" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Flower</div>
+          <div class="flower-meaning">For you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Graduation">
+        <img class="flower-img" src="https://thfvnext.bing.com/th/id/R.56a9c82b04b91c0c8bf351beda8b1755?rik=w6b3%2bT5sq3KspA&riu=http%3a%2f%2fwww.wgifts.sg%2fcdn%2fshop%2fproducts%2fgradwgerbera.jpg%3fv%3d1682040419&ehk=RHuaiQJ%2bwYTRslTMlqDt%2f1t%2fkoEY9OrLEPlqrbLb8Ik%3d&risl=&pid=ImgRaw&r=0" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red flower</div>
+          <div class="flower-meaning">Good student</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+       <!-- ── Birthday ── -->
+
+      <div class="flower-card" data-cat="Birthday">
+        <img class="flower-img" src="https://i.pinimg.com/736x/81/41/9b/81419b1ff4a0a90568b95ec54c64711a.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Rose</div>
+          <div class="flower-meaning">Fresh summer day</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Birthday">
+        <img class="flower-img" src="https://i.pinimg.com/736x/88/55/83/8855830e76aee35880e23ec3d349a105.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">Love you with my heart</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Birthday">
+        <img class="flower-img" src="https://i.pinimg.com/736x/20/3c/18/203c18314d4735bb602ebbe90933eb8c.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">White Rose</div>
+          <div class="flower-meaning">Souls harbour</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="Birthday">
+        <img class="flower-img" src="https://i.pinimg.com/1200x/2c/a8/6c/2ca86c4ca328e5cc6fbef4499bac473e.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Rose</div>
+          <div class="flower-meaning">my princess</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+
+   </div>
+  </div>
+
+    <!-- CTA Banner -->
+    <div style="margin-top:60px; background:var(--deep-rose); padding:50px 60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:white; font-weight:300; margin-bottom:6px;">Custom Order Available</div>
+        <div style="font-size:0.82rem; color:rgba(255,255,255,0.7); font-weight:300;">Have a special request? Contact us and we'll create it just for you.</div>
+      </div>
+      <a href="contact.html" style="background:white; color:var(--deep-rose); padding:14px 34px; text-decoration:none; font-size:0.76rem; letter-spacing:2px; text-transform:uppercase; font-family:'Jost',sans-serif; font-weight:500; transition:all 0.2s;" onmouseover="this.style.background='var(--blush)'" onmouseout="this.style.background='white'">
+        Get in Touch →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-col footer-about">
+      <div class="footer-logo">FLOWER & SMILE</div>
+      <p class="footer-tagline">Exquisite floral arrangements crafted to bring smiles, warmth, and timeless elegance to your every special moment.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h3 class="footer-heading">Explore</h3>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="occasions.html">Occasions</a></li>
+        <li><a href="flowers.html">Our Flowers</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3 class="footer-heading">Contact Us</h3>
+      <ul class="footer-contact">
+        <li><span>📍</span> Phnom Penh, Cambodia</li>
+        <li><span>📞</span> +855 12 345 678</li>
+        <li><span>✉️</span> info@flowersmile.com</li>
+        <li><span>🕒</span> Mon - Sun: 8:00 AM - 8:00 PM</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 <span>FLOWER & SMILE</span> · All rights reserved by Bloom & Petal</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="main.js"></script>
+<script>
+// ══════════════════════════════════════════
+//  MODAL STATE
+// ══════════════════════════════════════════
+let currentPrice = 0;
+let currentQty   = 1;
+let selectedMethod = null;
+
+function openModal(btn) {
+  const card    = btn.closest('.flower-card');
+  const name    = card.querySelector('.flower-name').textContent;
+  const meaning = card.querySelector('.flower-meaning').textContent;
+  const priceEl = card.querySelector('.flower-price').textContent;
+  const imgSrc  = card.querySelector('.flower-img').src;
+
+  currentPrice = parseFloat(priceEl.replace('$',''));
+  currentQty   = 1;
+  selectedMethod = null;
+
+  document.getElementById('modalFlowerName').textContent    = name;
+  document.getElementById('modalFlowerMeaning').textContent = meaning;
+  document.getElementById('modalFlowerMeaning2').textContent= meaning;
+  document.getElementById('modalFlowerPrice').textContent   = priceEl;
+  document.getElementById('modalFlowerImg').src             = imgSrc;
+  document.getElementById('qtyNum').textContent             = 1;
+  document.getElementById('modalTotal').innerHTML           = '<span>$' + currentPrice.toFixed(2) + '</span>';
+
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+  document.getElementById('btnConfirm').disabled = true;
+
+  document.getElementById('modalMain').style.display    = '';
+  document.getElementById('modalSuccess').style.display = 'none';
+
+  document.getElementById('payModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('payModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('payModal')) closeModal();
+}
+
+function changeQty(delta) {
+  currentQty = Math.max(1, currentQty + delta);
+  document.getElementById('qtyNum').textContent = currentQty;
+  const total = (currentPrice * currentQty).toFixed(2);
+  document.getElementById('modalTotal').innerHTML = '<span>$' + total + '</span>';
+}
+
+function selectPay(el, method) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMethod = method;
+  document.getElementById('btnConfirm').disabled = false;
+}
+
+function confirmOrder() {
+  if (!selectedMethod) return;
+  const khqrMethods = ['ABA Bank', 'Wing Bank', 'ACLEDA Bank'];
+  if (khqrMethods.includes(selectedMethod)) {
+    openQRModal();
+  } else {
+    showSuccess();
+  }
+}
+
+function openQRModal() {
+  const total = (currentPrice * currentQty).toFixed(2);
+  const name  = document.getElementById('modalFlowerName').textContent;
+
+  document.getElementById('qrModalTitle').textContent = selectedMethod;
+  document.getElementById('qrModalSub').textContent   = name + ' × ' + currentQty;
+  document.getElementById('qrModalAmount').textContent = '$' + total;
+
+  const qrDiv = document.getElementById('qrCodeDiv');
+  qrDiv.innerHTML = '';
+  new QRCode(qrDiv, {
+    text: 'KHQR|FLOWERSMILE|' + selectedMethod.replace(/ /g,'') + '|USD|' + total + '|' + name,
+    width: 200,
+    height: 200,
+    colorDark: '#1a1a1a',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  document.getElementById('qrModal').classList.add('open');
+}
+
+function closeQR() {
+  document.getElementById('qrModal').classList.remove('open');
+}
+
+function closeQROutside(e) {
+  if (e.target === document.getElementById('qrModal')) closeQR();
+}
+
+function afterQRPaid() {
+  closeQR();
+  showSuccess();
+}
+
+function showSuccess() {
+  const name  = document.getElementById('modalFlowerName').textContent;
+  const total = (currentPrice * currentQty).toFixed(2);
+  document.getElementById('successMsg').textContent =
+    'Thank you! Your order for ' + currentQty + '× ' + name +
+    ' ($' + total + ') via ' + selectedMethod + ' has been received. We\'ll contact you shortly to confirm delivery. 🌸';
+  document.getElementById('modalMain').style.display    = 'none';
+  document.getElementById('modalSuccess').style.display = 'block';
+}
+
+function drawQR(containerId, text) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  new QRCode(el, {
+    text: text,
+    width: 160,
+    height: 160,
+    colorDark: '#1a1a1a',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+
+// confirmOrder and showSuccess defined above
+
+// Close on Escape key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

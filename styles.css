@@ -1,0 +1,923 @@
+/* ==========================================================================
+   1. ROOT VARIABLES & GLOBAL STYLES (កំណត់ពណ៌ និងទម្រង់ទូទៅ)
+   ========================================================================== */
+:root {
+  /* Color Palette */
+  --cream: #faf6f1;
+  --blush: #f2d9cc;
+  --rose: #c97b6a;
+  --deep-rose: #8b4a3a;
+  --sage: #7a8c6e;
+  --dark-sage: #4a5c3e;
+  --charcoal: #2c2c2c;
+  --warm-white: #fffdf9;
+  --gold: #b89a6a;
+}
+
+/* Reset settings for all elements */
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+html { 
+  scroll-behavior: smooth; 
+}
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  overflow-x: hidden;
+}
+
+
+/* ==========================================================================
+   2. NAVIGATION BAR (របារម៉ឺនុយខាងលើ)
+   ========================================================================== */
+nav {
+  position: fixed; 
+  top: 0; left: 0; right: 0; 
+  z-index: 100;
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  padding: 20px 60px;
+  background: rgba(250, 246, 241, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(185, 154, 106, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Logo Style */
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--deep-rose);
+  letter-spacing: 1px;
+}
+
+.nav-logo span { 
+  color: var(--sage); 
+  font-style: italic; 
+}
+
+/* Menu Links */
+.nav-links {
+  display: flex; 
+  gap: 40px; 
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 0.82rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.3s;
+}
+
+/* Underline Animation Effect on Hover */
+.nav-links a::after {
+  content: '';
+  position: absolute; 
+  bottom: 0; left: 0;
+  width: 0; 
+  height: 1px;
+  background: var(--rose);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active { 
+  color: var(--rose); 
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after { 
+  width: 100%; 
+}
+
+
+/* ==========================================================================
+   3. PAGES & SHARED SECTIONS (ទម្រង់ទំព័រ និងការកំណត់រួម)
+   ========================================================================== */
+.page { 
+  display: none; 
+  min-height: 100vh; 
+}
+
+.page.active { 
+  display: block; 
+}
+
+.section {
+  padding: 100px 60px;
+}
+
+.section-label {
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  color: var(--charcoal);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.section-title em { 
+  font-style: italic; 
+  color: var(--rose); 
+}
+
+.divider {
+  width: 60px; 
+  height: 1px;
+  background: linear-gradient(to right, var(--rose), transparent);
+  margin: 20px 0 40px;
+}
+
+/* Page Header Banner */
+.page-header {
+  padding: 160px 60px 60px;
+  background: linear-gradient(to bottom, rgba(242, 217, 204, 0.3), transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  right: -100px; top: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 123, 106, 0.1) 0%, transparent 70%);
+}
+
+
+/* ==========================================================================
+   4. HERO SECTION (ផ្នែកដំបូងគេនៃគេហទំព័រ)
+   ========================================================================== */
+.hero {
+  height: 100vh;
+  position: relative;
+  display: flex; 
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; 
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 40%, rgba(242, 217, 204, 0.6) 0%, transparent 55%),
+    radial-gradient(ellipse at 20% 80%, rgba(122, 140, 110, 0.15) 0%, transparent 45%),
+    var(--cream);
+}
+
+/* Background Circle Animation (Breathe) */
+.hero-decoration {
+  position: absolute;
+  right: -80px; top: 50%;
+  transform: translateY(-50%);
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 123, 106, 0.12) 0%, transparent 70%);
+  animation: breathe 6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.05); }
+}
+
+/* Floating Petals Animation Effect */
+.hero-petals {
+  position: absolute; 
+  inset: 0; 
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0.15;
+  animation: floatPetal linear infinite;
+}
+
+@keyframes floatPetal {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.15; }
+  90% { opacity: 0.15; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* Hero Typography & CTA Content */
+.hero-content {
+  position: relative; 
+  z-index: 2;
+  padding: 0 60px;
+  max-width: 650px;
+  animation: fadeUp 1.2s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--charcoal);
+  margin-bottom: 24px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.hero-sub {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #6a6a6a;
+  font-weight: 300;
+  max-width: 420px;
+  margin-bottom: 40px;
+}
+
+/* Call To Action Button */
+.hero-cta {
+  display: inline-flex; 
+  align-items: center; 
+  gap: 12px;
+  background: var(--deep-rose);
+  color: white;
+  padding: 14px 34px;
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+}
+
+.hero-cta:hover {
+  background: var(--rose);
+  gap: 18px;
+}
+
+.hero-cta-arrow { 
+  font-size: 1rem; 
+  transition: transform 0.3s; 
+}
+
+.hero-cta:hover .hero-cta-arrow { 
+  transform: translateX(4px); 
+}
+
+
+/* ==========================================================================
+   5. OCCASIONS PAGE (ទំព័រឱកាសផ្សេងៗ)
+   ========================================================================== */
+.occasions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+}
+
+.occasion-card {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.occasion-card-bg {
+  position: absolute; 
+  inset: 0;
+  transition: transform 0.6s ease;
+}
+
+.occasion-card:hover .occasion-card-bg { 
+  transform: scale(1.06); 
+}
+
+/* Card Backgrounds Gradient Colors */
+.occ-1 .occasion-card-bg { background: linear-gradient(135deg, #f2d9cc 0%, #e8b9a5 100%); }
+.occ-2 .occasion-card-bg { background: linear-gradient(135deg, #d4e0ce 0%, #b5c9ac 100%); }
+.occ-3 .occasion-card-bg { background: linear-gradient(135deg, #e8d5e8 0%, #c9a8d4 100%); }
+.occ-4 .occasion-card-bg { background: linear-gradient(135deg, #fde8cc 0%, #f5c896 100%); }
+.occ-5 .occasion-card-bg { background: linear-gradient(135deg, #cce8f5 0%, #96c8f0 100%); }
+.occ-6 .occasion-card-bg { background: linear-gradient(135deg, #f5e6cc 0%, #e8c896 100%); }
+
+.occasion-emoji {
+  position: absolute;
+  font-size: 5rem;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  transition: transform 0.4s ease;
+  opacity: 0.85;
+}
+
+.occasion-card:hover .occasion-emoji {
+  transform: translate(-50%, -65%) scale(1.1);
+}
+
+.occasion-overlay {
+  position: absolute; 
+  inset: 0;
+  background: linear-gradient(to top, rgba(44,44,44,0.75) 0%, transparent 55%);
+  display: flex; 
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 28px;
+  transition: all 0.3s;
+}
+
+.occasion-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 6px;
+}
+
+.occasion-desc {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.5px;
+  font-weight: 300;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: all 0.3s ease 0.05s;
+}
+
+.occasion-card:hover .occasion-desc {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.occasion-tag {
+  position: absolute;
+  top: 18px; right: 18px;
+  background: rgba(255,255,255,0.9);
+  color: var(--deep-rose);
+  font-size: 0.68rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  font-weight: 500;
+}
+
+
+/* ==========================================================================
+   6. FLOWERS PAGE (ទំព័រប្រភេទផ្កា)
+   ========================================================================== */
+.flowers-intro {
+  max-width: 560px;
+}
+
+/* Category Filter Tabs */
+.filter-bar {
+  display: flex; 
+  gap: 10px; 
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+
+.filter-btn {
+  padding: 8px 22px;
+  border: 1px solid rgba(44,44,44,0.2);
+  background: transparent;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--charcoal);
+}
+
+.filter-btn:hover, 
+.filter-btn.active {
+  background: var(--deep-rose);
+  border-color: var(--deep-rose);
+  color: white;
+}
+
+/* Flower Cards Grid */
+.flowers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.flower-card {
+  background: white;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.flower-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.flower-img {
+  height: 220px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 4.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Flower Images Gradients Colors */
+.f1 { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+.f2 { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); }
+.f3 { background: linear-gradient(135deg, #fd79a8, #e84393); }
+.f4 { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+.f5 { background: linear-gradient(135deg, #55efc4, #00b894); }
+.f6 { background: linear-gradient(135deg, #ff7675, #d63031); }
+.f7 { background: linear-gradient(135deg, #81ecec, #0984e3); }
+.f8 { background: linear-gradient(135deg, #fddb92, #d1fdff); }
+
+.flower-info { 
+  padding: 20px; 
+}
+
+.flower-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--charcoal);
+  margin-bottom: 5px;
+}
+
+.flower-meaning {
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: 300;
+  margin-bottom: 14px;
+  letter-spacing: 0.3px;
+}
+
+.flower-footer {
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flower-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: var(--rose);
+}
+
+/* Add to Cart Button */
+.add-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--deep-rose);
+  background: transparent;
+  color: var(--deep-rose);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.add-btn:hover { 
+  background: var(--deep-rose); 
+  color: white; 
+}
+
+
+/* ==========================================================================
+   7. CONTACT PAGE & FORM (ទំព័រទំនាក់ទំនង និងទម្រង់បែបបទ)
+   ========================================================================== */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.contact-info h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-bottom: 12px;
+  color: var(--charcoal);
+}
+
+.contact-info p {
+  font-size: 0.85rem;
+  color: #777;
+  line-height: 1.9;
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+.contact-item {
+  display: flex; 
+  align-items: flex-start; 
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.contact-icon {
+  width: 42px; height: 42px; 
+  flex-shrink: 0;
+  background: var(--blush);
+  border-radius: 50%;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.contact-item-text label {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 3px;
+}
+
+.contact-item-text span {
+  font-size: 0.88rem;
+  color: var(--charcoal);
+  font-weight: 300;
+}
+
+/* Input Fields & Form styling */
+.contact-form { 
+  background: white; 
+  padding: 50px; 
+}
+
+.form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+}
+
+.form-sub { 
+  font-size: 0.82rem; 
+  color: #888; 
+  margin-bottom: 36px; 
+  font-weight: 300; 
+}
+
+.form-row { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px; 
+}
+
+.form-group { 
+  margin-bottom: 22px; 
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(44,44,44,0.15);
+  background: var(--cream);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--rose);
+}
+
+.form-group textarea { 
+  resize: vertical; 
+  min-height: 110px; 
+}
+
+/* Submit Form Button */
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  background: var(--deep-rose);
+  color: white;
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-weight: 400;
+}
+
+.submit-btn:hover { 
+  background: var(--rose); 
+}
+
+
+/* ==========================================================================
+   8. MODERN ELEGANT MAIN FOOTER (ផ្នែកខាងក្រោមបង្អស់នៃគេហទំព័រ)
+   ========================================================================== */
+.main-footer {
+  background-color: #2c2c2c; 
+  color: rgba(255, 255, 255, 0.7);
+  padding: 80px 60px 30px 60px;
+  font-family: 'Jost', sans-serif;
+  border-top: 3px solid var(--rose);
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr;
+  gap: 60px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Column 1: About, Logo, and Social Buttons (Centered Alignment) */
+.footer-about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  text-align: center;   
+}
+
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--warm-white);
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.footer-tagline {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 25px;
+  font-family: 'Jost', sans-serif;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 24px;
+  margin-top: 30px;     
+  justify-content: center; 
+  align-items: center;
+}
+
+.footer-socials a {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--warm-white);
+  text-decoration: none;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-socials a:hover {
+  background: var(--rose);
+  color: white;
+  border-color: var(--rose);
+  transform: translateY(-3px);
+}
+
+/* Footer Section Headings */
+.footer-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--warm-white);
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.footer-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -8px; left: 0;
+  width: 35px; height: 1px;
+  background: var(--rose);
+}
+
+/* Column 2: Useful Links */
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 300;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.footer-links a:hover {
+  color: var(--rose);
+  transform: translateX(5px);
+}
+
+/* Column 3: Contact Us info (Aligned perfectly) */
+.footer-col:last-child h3 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.footer-contact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: left;    
+}
+
+.footer-contact li {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 260px;    
+  margin-bottom: 16px !important;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-contact li span {
+  font-size: 1rem;
+  color: var(--rose);
+  margin-right: 12px;  
+  display: inline-block;
+  width: 20px;         
+  text-align: center;
+}
+
+/* Footer Copyright Area */
+.footer-bottom {
+  margin-top: 60px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 0.8px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-bottom span {
+  color: var(--rose);
+  font-weight: 400;
+}
+
+/* Old Simple Footer Styling */
+footer {
+  background: var(--charcoal);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 28px 60px;
+  font-size: 0.76rem;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+footer span { 
+  color: var(--rose); 
+}
+
+
+/* ==========================================================================
+   9. NOTIFICATIONS & TOASTS (ផ្ទាំងសារលោតដំណឹង)
+   ========================================================================== */
+.toast {
+  position: fixed;
+  bottom: 30px; right: 30px;
+  background: var(--dark-sage);
+  color: white;
+  padding: 16px 26px;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  z-index: 999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.toast.show { 
+  transform: translateY(0); 
+  opacity: 1; 
+}
+
+
+/* ==========================================================================
+   10. RESPONSIVE DESIGN (ការកែតម្រូវទំហំអេក្រង់ទូរស័ព្ទ និង Tablet)
+   ========================================================================== */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { gap: 24px; }
+  .section { padding: 70px 24px; }
+  .page-header { padding: 120px 24px 40px; }
+  
+  .hero-content { padding: 0 24px; }
+  
+  .occasions-grid { grid-template-columns: repeat(2, 1fr); }
+  .flowers-grid { grid-template-columns: repeat(2, 1fr); }
+  
+  .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+  .contact-form { padding: 32px; }
+  .form-row { grid-template-columns: 1fr; }
+
+  /* Modern Footer Responsive Layout */
+  .main-footer {
+    padding: 60px 24px 30px 24px;
+  }
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .footer-heading {
+    margin-bottom: 18px;
+  }
+  .footer-bottom {
+    margin-top: 40px;
+  }
+}

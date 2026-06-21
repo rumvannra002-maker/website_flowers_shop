@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Flowers — FLOWER & SMILE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  
+  <style>
+    /* ── CSS-Only Filter ── */
+    .filter-radio { display: none; }
+
+    .flower-card {
+      animation: fadeUp 0.4s ease forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Active label */
+    #filter-all:checked       ~ .section .filter-btn[for="filter-all"],
+    #filter-roses:checked     ~ .section .filter-btn[for="filter-roses"],
+    #filter-carnation:checked ~ .section .filter-btn[for="filter-carnation"],
+    #filter-hydrangea:checked ~ .section .filter-btn[for="filter-hydrangea"],
+    #filter-lily:checked      ~ .section .filter-btn[for="filter-lily"],
+    #filter-sunflower:checked ~ .section .filter-btn[for="filter-sunflower"],
+    #filter-tulip:checked     ~ .section .filter-btn[for="filter-tulip"] {
+      background: #c97b6a;
+      color: #fff;
+      border-color: #c97b6a;
+    }
+
+    /* Hide all cards when a specific filter is active */
+    #filter-roses:checked     ~ .section .flower-card,
+    #filter-carnation:checked ~ .section .flower-card,
+    #filter-hydrangea:checked ~ .section .flower-card,
+    #filter-lily:checked      ~ .section .flower-card,
+    #filter-sunflower:checked ~ .section .flower-card,
+    #filter-tulip:checked     ~ .section .flower-card {
+      display: none;
+    }
+
+    /* Show only matching category */
+    #filter-roses:checked     ~ .section .flower-card[data-cat="roses"]     { display: block; }
+    #filter-carnation:checked ~ .section .flower-card[data-cat="carnation"] { display: block; }
+    #filter-hydrangea:checked ~ .section .flower-card[data-cat="hydrangea"] { display: block; }
+    #filter-lily:checked      ~ .section .flower-card[data-cat="lily"]      { display: block; }
+    #filter-sunflower:checked ~ .section .flower-card[data-cat="sunflower"] { display: block; }
+    #filter-tulip:checked     ~ .section .flower-card[data-cat="tulip"]     { display: block; }
+
+    /* ── Page Layout ── */
+    .page.active {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-petals {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .section {
+      position: relative;
+      z-index: 1;
+    }
+    .flower-img {
+      width: 100%;
+      height: 280px;
+      object-fit: contain;
+      object-position: bottom;
+      background-color: #fcf9f6;
+      display: block;
+    }
+
+    /* ── Buy Now Button ── */
+    .buy-btn {
+      background: #c97b6a;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.15s ease;
+      white-space: nowrap;
+    }
+    .buy-btn:hover { background: #b56758; transform: translateY(-1px); }
+    .buy-btn:active { transform: scale(0.97); }
+
+    /* ── Modal Overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      font-family: 'Jost', sans-serif;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #c97b6a 0%, #e8a898 100%);
+      padding: 20px 24px 16px;
+      color: #fff;
+      position: relative;
+    }
+    .modal-header h2 { margin: 0 0 2px; font-size: 1.1rem; font-weight: 500; letter-spacing: 0.04em; }
+    .modal-header .modal-flower-name { font-size: 0.82rem; opacity: 0.88; font-style: italic; }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 18px;
+      background: rgba(255,255,255,0.25);
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.4); }
+
+    .modal-summary {
+      padding: 16px 24px;
+      border-bottom: 1px solid #f0ebe8;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .modal-summary img {
+      width: 64px; height: 64px;
+      object-fit: contain;
+      background: #fcf9f6;
+      border-radius: 10px;
+      border: 1px solid #ede8e5;
+    }
+    .modal-summary-info .s-name { font-size: 0.92rem; font-weight: 500; color: #2c2825; margin-bottom: 2px; }
+    .modal-summary-info .s-meaning { font-size: 0.78rem; color: #9b8f8a; font-style: italic; margin-bottom: 6px; }
+    .modal-summary-info .s-price { font-size: 1.05rem; font-weight: 500; color: #c97b6a; }
+
+    .modal-qty-row {
+      padding: 12px 24px;
+      border-bottom: 1px solid #f0ebe8;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-qty-row label { font-size: 0.82rem; color: #6b5f5c; flex: 1; }
+    .qty-ctrl { display: flex; align-items: center; gap: 8px; }
+    .qty-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #d4bfba;
+      background: #fdf8f6;
+      color: #c97b6a;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .qty-btn:hover { background: #f5e8e5; }
+    .qty-num { font-size: 0.95rem; font-weight: 500; min-width: 24px; text-align: center; }
+    .modal-total { font-size: 0.9rem; color: #2c2825; }
+    .modal-total span { color: #c97b6a; font-weight: 500; }
+
+    .modal-body { padding: 16px 24px 20px; }
+    .modal-body h3 {
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #9b8f8a; margin: 0 0 12px;
+    }
+    .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .pay-method {
+      border: 1.5px solid #ede8e5;
+      border-radius: 10px;
+      padding: 12px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+      background: #fdfcfb;
+    }
+    .pay-method:hover { border-color: #c97b6a; background: #fdf5f3; }
+    .pay-method.selected { border-color: #c97b6a; background: #fdf5f3; }
+    .pay-method .pm-icon { font-size: 1.6rem; margin-bottom: 5px; display: block; }
+    .pay-method .pm-name { font-size: 0.75rem; color: #4a3f3c; font-weight: 500; }
+    .pay-method .pm-sub { font-size: 0.68rem; color: #9b8f8a; margin-top: 1px; }
+
+    .pay-aba .pm-icon { color: #004B87; }
+    .pay-wing .pm-icon { color: #e8a000; }
+    .pay-acleda .pm-icon { color: #1a6b3c; }
+    .pay-cash .pm-icon { color: #888; }
+
+    .btn-confirm {
+      width: 100%;
+      background: #c97b6a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .btn-confirm:hover { background: #b56758; }
+    .btn-confirm:disabled { background: #d4bfba; cursor: not-allowed; }
+
+    .modal-success { display: none; padding: 36px 24px; text-align: center; }
+    .modal-success .success-icon { font-size: 3rem; color: #5cb85c; margin-bottom: 12px; }
+    .modal-success h3 { font-size: 1.1rem; font-weight: 500; color: #2c2825; margin-bottom: 6px; }
+    .modal-success p { font-size: 0.85rem; color: #9b8f8a; line-height: 1.7; margin-bottom: 20px; }
+
+    /* ── Footer Socials ── */
+    .footer-socials {
+      display: flex; gap: 24px; margin-top: 15px; align-items: center;
+    }
+    .footer-socials a {
+      color: rgba(255,255,255,0.8) !important;
+      font-size: 1.3rem !important;
+      text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+      background: none !important; border: none !important;
+      padding: 0 !important; width: auto !important; height: auto !important;
+    }
+    .footer-socials a:hover { color: #c97b6a !important; transform: translateY(-2px); }
+    .footer-heading::after, .footer-col h3::after { display: none !important; content: none !important; }
+    .footer-links li, .footer-contact li { margin-bottom: 16px !important; }
+    .footer-links li:last-child, .footer-contact li:last-child { margin-bottom: 0 !important; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"> FLOWER & SMILE </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="occasions.html">Occasions</a></li>
+    <li><a href="flowers.html" class="active">Flowers</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payModal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Complete Your Order</h2>
+      <div class="modal-flower-name" id="modalFlowerMeaning"></div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+    <div id="modalMain">
+      <div class="modal-summary">
+        <img id="modalFlowerImg" src="" alt="flower" />
+        <div class="modal-summary-info">
+          <div class="s-name" id="modalFlowerName"></div>
+          <div class="s-meaning" id="modalFlowerMeaning2"></div>
+          <div class="s-price" id="modalFlowerPrice"></div>
+        </div>
+      </div>
+      <div class="modal-qty-row">
+        <label>Quantity</label>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="qty-num" id="qtyNum">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <div class="modal-total">Total: <span id="modalTotal"></span></div>
+      </div>
+      <div class="modal-body">
+        <h3>Choose Payment</h3>
+        <div class="payment-methods">
+          <div class="pay-method pay-aba" onclick="selectPay(this,'ABA Bank')" data-method="ABA Bank">
+            <span class="pm-icon"><i class="fa-solid fa-building-columns"></i></span>
+            <div class="pm-name">ABA Bank</div>
+            <div class="pm-sub">KHQR / Transfer</div>
+          </div>
+          <div class="pay-method pay-wing" onclick="selectPay(this,'Wing Bank')" data-method="Wing Bank">
+            <span class="pm-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+            <div class="pm-name">Wing Bank</div>
+            <div class="pm-sub">Mobile Money</div>
+          </div>
+          <div class="pay-method pay-acleda" onclick="selectPay(this,'ACLEDA Bank')" data-method="ACLEDA Bank">
+            <span class="pm-icon"><i class="fa-solid fa-credit-card"></i></span>
+            <div class="pm-name">ACLEDA</div>
+            <div class="pm-sub">Card / Transfer</div>
+          </div>
+          <div class="pay-method pay-cash" onclick="selectPay(this,'Cash on Delivery')" data-method="Cash on Delivery">
+            <span class="pm-icon"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+            <div class="pm-name">Cash</div>
+            <div class="pm-sub">Pay on Delivery</div>
+          </div>
+        </div>
+        <button class="btn-confirm" id="btnConfirm" onclick="confirmOrder()" disabled>
+          Confirm Order
+        </button>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <h3>Order Placed! 🌸</h3>
+      <p id="successMsg"></p>
+      <button class="btn-confirm" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- QR CODE MODAL -->
+<div class="modal-overlay" id="qrModal" onclick="closeQROutside(event)">
+  <div class="modal-box" style="max-width:320px;">
+    <div class="modal-header" id="qrModalHeader">
+      <h2 id="qrModalTitle">Scan to Pay</h2>
+      <div class="modal-flower-name" id="qrModalSub"></div>
+      <button class="modal-close" onclick="closeQR()">✕</button>
+    </div>
+    <div style="padding:24px; text-align:center;">
+      <div style="display:inline-block; padding:14px; background:#fff; border:2px solid #e0d8d5; border-radius:14px; margin-bottom:16px;">
+        <div id="qrCodeDiv"></div>
+      </div>
+      <div style="font-size:1.15rem; font-weight:500; color:#c97b6a; margin-bottom:6px;" id="qrModalAmount"></div>
+      <div style="font-size:0.75rem; color:#b0a09c; line-height:1.7;">Open your banking app → Scan QR<br>Payment will be confirmed automatically</div>
+      <button class="btn-confirm" style="margin-top:18px;" onclick="afterQRPaid()">I've Paid ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="page active">
+
+  <div class="hero-petals" id="petals"></div>
+
+  <div class="page-header">
+    <p class="section-label">Our Collection</p>
+    <h1 class="section-title">Nature's Most<br><em>Beautiful</em> Blooms</h1>
+    <div class="divider"></div>
+    <p style="font-size:0.88rem; color:#777; font-weight:300; max-width:480px; line-height:1.9;">
+      Fresh blooms, hand-tied bouquets, and endless smiles.
+    </p>
+  </div>
+
+  <!-- ══ CSS-Only Filter Radio Inputs (must be sibling of .section) ══ -->
+  <input type="radio" name="flower-filter" id="filter-all"       class="filter-radio" checked>
+  <input type="radio" name="flower-filter" id="filter-roses"     class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-carnation" class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-hydrangea" class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-lily"      class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-sunflower" class="filter-radio">
+  <input type="radio" name="flower-filter" id="filter-tulip"     class="filter-radio">
+
+  <div class="section" style="padding-top:0;">
+    <!-- Filter Bar — labels instead of buttons -->
+    <div class="filter-bar">
+      <label class="filter-btn" for="filter-all">All Flowers</label>
+      <label class="filter-btn" for="filter-roses">Rose</label>
+      <label class="filter-btn" for="filter-carnation">Carnation</label>
+      <label class="filter-btn" for="filter-hydrangea">Hydrangea</label>
+      <label class="filter-btn" for="filter-lily">Lily</label>
+      <label class="filter-btn" for="filter-sunflower">Sun Flower</label>
+      <label class="filter-btn" for="filter-tulip">Tulip</label>
+    </div>
+
+    <div class="flowers-grid" id="flowersGrid">
+
+      <div class="flower-card" data-cat="all">
+        <img class="flower-img" src="https://i0.wp.com/venusfleurs.ca/wp-content/uploads/2025/08/28.png?w=500&ssl=1" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Flower</div>
+          <div class="flower-meaning">Best seller</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="all">
+        <img class="flower-img" src="https://i0.wp.com/venusfleurs.ca/wp-content/uploads/2025/08/21.png?fit=500,500&ssl=1" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Flower</div>
+          <div class="flower-meaning">Best seller</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TULIP -->
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/10/22/d94c452926e3417dae95254dfa077050.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Tulip</div>
+          <div class="flower-meaning">Full of vitality</div>
+          <div class="flower-footer">
+            <div class="flower-price">$50.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LILY -->
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/02/1ca12ee9330e47e79c7d9af56a307a1f.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Lucky flowers bloom</div>
+          <div class="flower-footer">
+            <div class="flower-price">$27.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROSES -->
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/09/26/121c57c03bdb40cc9ae4b6ea58d3a5bf.jpg" alt="Red Rose">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">Love You</div>
+          <div class="flower-footer">
+            <div class="flower-price">$18.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/07/18/d4bda5efce6144a783e71d20c7973735.jpg" alt="Red & White Rose">
+        <div class="flower-info">
+          <div class="flower-name">Red & White Rose</div>
+          <div class="flower-meaning">Sweet Symphony</div>
+          <div class="flower-footer">
+            <div class="flower-price">$18.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/02/c8aaeb9f8d8a473182518053c225e682.jpg" alt="Red Rose">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">Love you with my heart</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUNFLOWER -->
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/01/30/40c8c36cf783424d853997c09352a01d.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Sunward warmth</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/07/12/99d9d4ce849f4841a96aded1814f879a.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Ideal Blooming</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARNATION -->
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/11/09/4b2848ed98104db3a71d96caeb500fb4.jpg" alt="Red Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Red Carnation</div>
+          <div class="flower-meaning">Souls harbour</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/21/1d5900af965e4ac4adc1eaac820a8dc8.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Elegant Gift for Someone Special</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/20/4ea0764b5d954a77857efdfa41e9d4f3.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Beautiful Season</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/08/5e0701b2f4704a99bae3842c6d49b627.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Everything is agreeable</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/03/20/ae502a670218426c8d7c13a65a0f8343.jpg" alt="Purple Rose">
+        <div class="flower-info">
+          <div class="flower-name">Purple Rose</div>
+          <div class="flower-meaning">I love you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/01/16/c4e1a038dfdf439187b5574768768819.jpg" alt="Red Rose">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">Waiting for you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HYDRANGEA -->
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/04/16/94cfbcf03aa54d36b022fa587900e577.jpg" alt="Blue Hydrangea">
+        <div class="flower-info">
+          <div class="flower-name">Blue Hydrangea</div>
+          <div class="flower-meaning">Good wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/04/16/75e0676ea96640eb907524876f5f8acb.jpg" alt="Hydrangea">
+        <div class="flower-info">
+          <div class="flower-name">Hydrangea</div>
+          <div class="flower-meaning">Good wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$100.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/03/cdd51f755c9f49a5a47e0953ef24ea6f.jpg" alt="Red Rose">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">You are the only one</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/02/dadc47f278d1459c85d77b843ce8ec4e.jpg" alt="Pink Rose">
+        <div class="flower-info">
+          <div class="flower-name">Pink Rose</div>
+          <div class="flower-meaning">Flower Sea</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/04/13/726c85be2da14ceaa797ea327d5e19cf.jpg" alt="Blue Rose">
+        <div class="flower-info">
+          <div class="flower-name">Blue Rose</div>
+          <div class="flower-meaning">Beautiful as poetry</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/01/22/66fb9096b63647de980c0909e146ded0.jpg" alt="Red Rose">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">The love of this life</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/05/d722270d803c47bc81f558be7e2a7f72.jpg" alt="Orange Rose">
+        <div class="flower-info">
+          <div class="flower-name">Orange Rose</div>
+          <div class="flower-meaning">Express one's mind</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/08/0a7ff92747d049429c9fa82e6685a20a.jpg" alt="Red Rose">
+        <div class="flower-info">
+          <div class="flower-name">Red Rose</div>
+          <div class="flower-meaning">Stable happiness</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/08/da6aee760b084ff484f5cbf166b0241a.jpg" alt="Pink Rose">
+        <div class="flower-info">
+          <div class="flower-name">Pink Rose</div>
+          <div class="flower-meaning">Fresh Summer Day</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="roses">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/07/11/c60f7856d5734991b35a3be58256fd39.jpg" alt="Pink Rose">
+        <div class="flower-info">
+          <div class="flower-name">Pink Rose</div>
+          <div class="flower-meaning">My princess</div>
+          <div class="flower-footer">
+            <div class="flower-price">$16.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUNFLOWER continued -->
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/08/06/fd0ee684ab604913891c7e9c0ed08768.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">As warm as ever</div>
+          <div class="flower-footer">
+            <div class="flower-price">$5.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/14/08c6f4a1fb594d1e8b3b22dbc6ec3b05.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Beautiful as you</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/14/6207527d84d149bc8977b496a9f6a609.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Live up to youth</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TULIP continued -->
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/12/14/45a0acd39e2d42f39b1e77c95a169a92.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/10/22/ce6edc7430514afdb0ace7256f6573d1.jpg" alt="Purple Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Purple Tulip</div>
+          <div class="flower-meaning">Happy life</div>
+          <div class="flower-footer">
+            <div class="flower-price">$65.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/12/14/d09e0462c0df476d93608f418ba4ed19.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$70.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/10/26/6bf1afc060d744ee8051da5b07f24a9d.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Bright smiling face</div>
+          <div class="flower-footer">
+            <div class="flower-price">$12.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/06/685356b5e7604388bc24b6b249806ba4.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Brilliant sunshine</div>
+          <div class="flower-footer">
+            <div class="flower-price">$18.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/06/19/e7ebc8d3f2bf4607bcb2b57a7b894b3d.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Colorful life</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/21/590cd76669e849b49ff8e3cb6a47427c.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Happy mood</div>
+          <div class="flower-footer">
+            <div class="flower-price">$22.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/06/19/28fe4df086d64a018894876208e1954c.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Sky full of stars</div>
+          <div class="flower-footer">
+            <div class="flower-price">$10.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/06/67aa2b820b9040a3af12110986d74f57.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">The guardian of love</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/01/2a3f66ea70d64a0eabd550e93e4482a3.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Dream Angels</div>
+          <div class="flower-footer">
+            <div class="flower-price">$18.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="sunflower">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/03/28/c0915ef11c2c483baa6d2ce0ce10b729.jpg" alt="Sunflower">
+        <div class="flower-info">
+          <div class="flower-name">Sunflower</div>
+          <div class="flower-meaning">Happy companionship</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARNATION continued -->
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/11/09/f1c1e8d4fc6a4406aa00dca583fd8024.jpg" alt="Pink Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Pink Carnation</div>
+          <div class="flower-meaning">Happiness</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/09/26/3ea170857ce74629bbcf2e9d52f54f51.jpg" alt="White Tulip">
+        <div class="flower-info">
+          <div class="flower-name">White Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$18.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/04/16/121a75e4c66642809c30c23fcdcdb7fb.jpg" alt="Blue Hydrangea">
+        <div class="flower-info">
+          <div class="flower-name">Blue Hydrangea</div>
+          <div class="flower-meaning">Good wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/03/31/da94f9d72a034c4197457e41a07c22af.jpg" alt="Pink Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Pink Carnation</div>
+          <div class="flower-meaning">A beautiful smile</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2026/04/17/d1a0c8291ba044e4a8c05f578c2a9690.jpg" alt="Pink Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Pink Carnation</div>
+          <div class="flower-meaning">Happy smile</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2026/04/17/a81816e5ff4b46ed83ae0f703df2108b.jpg" alt="Pink Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Pink Carnation</div>
+          <div class="flower-meaning">Healthy and beautiful</div>
+          <div class="flower-footer">
+            <div class="flower-price">$12.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/03/31/b595a2d2942d4ff698df5eb170a309af.jpg" alt="Red Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Red Carnation</div>
+          <div class="flower-meaning">Infinite blessings</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/10/16/6148c2e16bc34658aff830be3d402de5.jpg" alt="Pink Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Pink Carnation</div>
+          <div class="flower-meaning">Warm blessings</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="carnation">
+        <img class="flower-img" src="https://img.realfreshflower.com/2026/04/17/26b1ca3b377e42c9919f72782d402a94.jpg" alt="Pink Carnation">
+        <div class="flower-info">
+          <div class="flower-name">Pink Carnation</div>
+          <div class="flower-meaning">Be bursting with happiness</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HYDRANGEA continued -->
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/02/26/3877d0af374148ebb7a03dee829cf834.jpg" alt="Blue Hydrangea">
+        <div class="flower-info">
+          <div class="flower-name">Blue Hydrangea</div>
+          <div class="flower-meaning">Good wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$60.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/02/26/ad632bd7bcbf4d7386aae6e4b02417bb.jpg" alt="Pink Hydrangea">
+        <div class="flower-info">
+          <div class="flower-name">Pink Hydrangea</div>
+          <div class="flower-meaning">The direction of happiness</div>
+          <div class="flower-footer">
+            <div class="flower-price">$40.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/04/16/30e06d226c0d48a694a9afb57defabf5.jpg" alt="Pink Hydrangea & Rose">
+        <div class="flower-info">
+          <div class="flower-name">Pink Hydrangea & Rose</div>
+          <div class="flower-meaning">Good wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$35.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/04/16/70c929d3b1e74f38a503214e0b24d38a.jpg" alt="Purple Hydrangea">
+        <div class="flower-info">
+          <div class="flower-name">Purple Hydrangea</div>
+          <div class="flower-meaning">Good wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$40.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/12/14/34f126a345064f618a5f48ac9ecbbdd3.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$35.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/10/22/bcefa23f4652438b83031c2c29a96980.jpg" alt="Purple Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Purple Tulip</div>
+          <div class="flower-meaning">Happy Harbor</div>
+          <div class="flower-footer">
+            <div class="flower-price">$50.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/09/26/e2c35b5065294b9f8c1ee309f61ccd0c.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="hydrangea">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/04/16/97835b671160410ab0935aba6c37b89a.jpg" alt="Pink Hydrangea">
+        <div class="flower-info">
+          <div class="flower-name">Pink Hydrangea</div>
+          <div class="flower-meaning">Good wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LILY continued -->
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/08/a0d14198697b4aca9774d6ee15eb2144.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Warm wishes</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/12/557a089c1c60400fbce48e0e57ed3126.jpg" alt="Luxury Lily">
+        <div class="flower-info">
+          <div class="flower-name">Luxury Lily</div>
+          <div class="flower-meaning">Continuous blessings</div>
+          <div class="flower-footer">
+            <div class="flower-price">$22.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/13/0ff6d619d11a4f69b31edf5046a69c5d.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Blessing Forever</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2024/02/08/8ec5767b6bb4489184bbb233728495f9.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Deep blessing</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="lily">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/09/02/b8a45fd074a5468ebfb7c8175133cc56.jpg" alt="Lily">
+        <div class="flower-info">
+          <div class="flower-name">Lily</div>
+          <div class="flower-meaning">Full of blessings</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TULIP continued -->
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2023/12/14/7f1a7ba499bb4332a6033659bd16a36d.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$30.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2026/04/16/7a5f91a9850c4ac58e0ad1e1769bd291.jpg" alt="White Tulip">
+        <div class="flower-info">
+          <div class="flower-name">White Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$20.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/09/26/5d9ef661680144e992752a72ad78ab89.jpg" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Pink Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$25.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flower-card" data-cat="tulip">
+        <img class="flower-img" src="https://img.realfreshflower.com/2025/09/26/fec389ff90ab482a9a1ca71f3a72262d.jpg" alt="White Tulip">
+        <div class="flower-info">
+          <div class="flower-name">White Tulip</div>
+          <div class="flower-meaning">Tulip bouquet</div>
+          <div class="flower-footer">
+            <div class="flower-price">$35.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+      
+       <div class="flower-card" data-cat="all">
+        <img class="flower-img" src="https://blogger.googleusercontent.com/img/a/AVvXsEicw63dnSeNIEJeOIUZCACq73gVkQcQ9xMExXs6h7ySUSndOm0V-mq5u-o_8GRbfD1vRsirjXDKaYLzih0LKU7-uyjUPQ6decVVbWy_ZNhfRCTQm4JZeXCJklYHl1dgx3P_8ovWYnsGIsHUxoD9lvoksb42VA6ZZB-UQQeKbAVAEGq_355NtKw2BnD7=s16000-rw" alt="Pink Tulip">
+        <div class="flower-info">
+          <div class="flower-name">Flower</div>
+          <div class="flower-meaning">Best seller</div>
+          <div class="flower-footer">
+            <div class="flower-price">$15.00</div>
+            <button class="buy-btn" onclick="openModal(this)">Buy Now</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /flowers-grid -->
+  </div><!-- /section -->
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-col footer-about">
+      <div class="footer-logo">FLOWER & SMILE</div>
+      <p class="footer-tagline">Exquisite floral arrangements crafted to bring smiles, warmth, and timeless elegance to your every special moment.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h3 class="footer-heading">Explore</h3>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="occasions.html">Occasions</a></li>
+        <li><a href="flowers.html">Our Flowers</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3 class="footer-heading">Contact Us</h3>
+      <ul class="footer-contact">
+        <li><span>📍</span> Phnom Penh, Cambodia</li>
+        <li><span>📞</span> +855 12 345 678</li>
+        <li><span>✉️</span> info@flowersmile.com</li>
+        <li><span>🕒</span> Mon - Sun: 8:00 AM - 8:00 PM</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 <span>FLOWER & SMILE</span> · All rights reserved by Bloom & Petal</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="main.js"></script>
+<script>
+let currentPrice  = 0;
+let currentQty    = 1;
+let selectedMethod = null;
+
+function openModal(btn) {
+  const card    = btn.closest('.flower-card');
+  const name    = card.querySelector('.flower-name').textContent;
+  const meaning = card.querySelector('.flower-meaning').textContent;
+  const priceEl = card.querySelector('.flower-price').textContent;
+  const imgSrc  = card.querySelector('.flower-img').src;
+
+  currentPrice   = parseFloat(priceEl.replace('$',''));
+  currentQty     = 1;
+  selectedMethod = null;
+
+  document.getElementById('modalFlowerName').textContent     = name;
+  document.getElementById('modalFlowerMeaning').textContent  = meaning;
+  document.getElementById('modalFlowerMeaning2').textContent = meaning;
+  document.getElementById('modalFlowerPrice').textContent    = priceEl;
+  document.getElementById('modalFlowerImg').src              = imgSrc;
+  document.getElementById('qtyNum').textContent              = 1;
+  document.getElementById('modalTotal').innerHTML            = '<span>$' + currentPrice.toFixed(2) + '</span>';
+
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+  document.getElementById('btnConfirm').disabled = true;
+
+  document.getElementById('modalMain').style.display    = '';
+  document.getElementById('modalSuccess').style.display = 'none';
+
+  document.getElementById('payModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('payModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('payModal')) closeModal();
+}
+
+function changeQty(delta) {
+  currentQty = Math.max(1, currentQty + delta);
+  document.getElementById('qtyNum').textContent = currentQty;
+  document.getElementById('modalTotal').innerHTML = '<span>$' + (currentPrice * currentQty).toFixed(2) + '</span>';
+}
+
+function selectPay(el, method) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMethod = method;
+  document.getElementById('btnConfirm').disabled = false;
+}
+
+function confirmOrder() {
+  if (!selectedMethod) return;
+  if (['ABA Bank','Wing Bank','ACLEDA Bank'].includes(selectedMethod)) {
+    openQRModal();
+  } else {
+    showSuccess();
+  }
+}
+
+function openQRModal() {
+  const total = (currentPrice * currentQty).toFixed(2);
+  const name  = document.getElementById('modalFlowerName').textContent;
+
+  document.getElementById('qrModalTitle').textContent  = selectedMethod;
+  document.getElementById('qrModalSub').textContent    = name + ' × ' + currentQty;
+  document.getElementById('qrModalAmount').textContent = '$' + total;
+
+  const qrDiv = document.getElementById('qrCodeDiv');
+  qrDiv.innerHTML = '';
+  new QRCode(qrDiv, {
+    text: 'KHQR|FLOWERSMILE|' + selectedMethod.replace(/ /g,'') + '|USD|' + total + '|' + name,
+    width: 200, height: 200,
+    colorDark: '#1a1a1a', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  document.getElementById('qrModal').classList.add('open');
+}
+
+function closeQR() {
+  document.getElementById('qrModal').classList.remove('open');
+}
+
+function closeQROutside(e) {
+  if (e.target === document.getElementById('qrModal')) closeQR();
+}
+
+function afterQRPaid() {
+  closeQR();
+  showSuccess();
+}
+
+function showSuccess() {
+  const name  = document.getElementById('modalFlowerName').textContent;
+  const total = (currentPrice * currentQty).toFixed(2);
+  document.getElementById('successMsg').textContent =
+    'Thank you! Your order for ' + currentQty + '× ' + name +
+    ' ($' + total + ') via ' + selectedMethod + ' has been received. We\'ll contact you shortly to confirm delivery. 🌸';
+  document.getElementById('modalMain').style.display    = 'none';
+  document.getElementById('modalSuccess').style.display = 'block';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
