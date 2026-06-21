@@ -121,6 +121,48 @@
     .footer-contact li:last-child {
       margin-bottom: 0 !important;
     }
+
+    /* ==========================================================================
+       MOBILE RESPONSIVE STYLES (Added for layout fixes)
+       ========================================================================== */
+    @media (max-width: 992px) {
+      .hero-floating-images {
+        display: none !important; /* Hide floating images on smaller screens to prevent overlapping */
+      }
+      .hero-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        padding: 40px 20px !important;
+      }
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 columns for tablets */
+        gap: 30px !important;
+      }
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+      .gallery-grid {
+        grid-template-columns: 1fr !important; /* Stack gallery layout on tablet/mobile */
+      }
+      .gallery-tall-img {
+        height: 400px !important;
+        grid-row: auto !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .features-grid {
+        grid-template-columns: 1fr !important; /* 1 column for mobile */
+        gap: 25px !important;
+      }
+      .products-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .hero-title {
+        font-size: 2.5rem !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -166,8 +208,9 @@
       </div>
     </div>
 
-    <div class="section" style="padding-top:70px; padding-bottom:70px; background: white;">
-      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:50px; text-align:center; max-width:1200px; margin:auto;">
+    <!-- Features Section -->
+    <div class="section" style="padding: 70px 20px; background: white;">
+      <div class="features-grid" style="display:grid; grid-template-columns: repeat(4,1fr); gap:50px; text-align:center; max-width:1200px; margin:auto;">
         
         <div>
           <div style="font-size:2.4rem; margin-bottom:10px;">🌸</div>
@@ -196,17 +239,18 @@
       </div>
     </div>
 
-    <div style="background-color: #f2ede4; padding: 40px 20px 100px 20px; text-align: center; font-family: 'Jost', sans-serif;">
+    <!-- Products Section -->
+    <div style="background-color: #f2ede4; padding: 40px 20px 60px 20px; text-align: center; font-family: 'Jost', sans-serif;">
       <div style="max-width: 1100px; margin: 0 auto;">
         
-        <div style="text-align: center; margin-bottom: 60px;">
+        <div style="text-align: center; margin-bottom: 40px;">
           <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 500; color: #615a51; margin-bottom: 15px; letter-spacing: 0.5px;">Find your bouquet flower</h2>
           <p style="font-size: 0.92rem; color: #7e766c; max-width: 600px; margin: 0 auto; line-height: 1.8; font-weight: 300;">
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
           </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 35px;">
+        <div class="products-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 35px;">
           
           <div style="display: flex; flex-direction: column; position: relative;">
             <div style="border-top-left-radius: 250px; border-top-right-radius: 250px; overflow: hidden; aspect-ratio: 1/1.15; background: #dbd5cd; margin-top: 20px;">
@@ -242,17 +286,21 @@
       </div>
     </div>
 
-  </div> <div style="background-color: #f2ede4; padding: 40px 20px 20px 20px; text-align: center; font-family: 'Jost', sans-serif;">
+  </div> 
+  
+  <!-- How to Section -->
+  <div style="background-color: #f2ede4; padding: 40px 20px 20px 20px; text-align: center; font-family: 'Jost', sans-serif;">
     <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 500; color: #615a51; margin-bottom: 15px; letter-spacing: 0.5px;">How to Multiple Wrap</h2>
     <p style="font-size:0.88rem; font-weight:300; color:#777; line-height:1.9; max-width:560px; margin:0 auto;">
       Elevate the presentation of your floral arrangements, ideal for special occasions or just because moments, and create something previously unimagined.
     </p>
   </div>
 
-  <div style="background-color: #f2ede4; padding: 20px 20px 100px 20px; text-align: center; font-family: 'Jost', sans-serif;">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:960px; margin:0 auto;">
+  <!-- Gallery Section -->
+  <div style="background-color: #f2ede4; padding: 20px 20px 60px 20px; text-align: center; font-family: 'Jost', sans-serif;">
+    <div class="gallery-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:960px; margin:0 auto;">
       
-      <div style="position:relative; overflow:hidden; border-radius:4px; grid-row:span 2;">
+      <div class="gallery-tall-img" style="position:relative; overflow:hidden; border-radius:4px; grid-row:span 2;">
         <img src="https://images.pexels.com/photos/5410125/pexels-photo-5410125.jpeg?cs=srgb&dl=pexels-amina-filkins-5410125.jpg&fm=jpg" alt="Wrapping" style="width:100%; height:612px; object-fit:cover; display:block;" />
         <span style="position:absolute; bottom:14px; left:14px; background:rgba(74,80,56,0.82); color:#f0ede4; font-size:0.78rem; padding:5px 12px; border-radius:2px;">Wrapping</span>
       </div>
@@ -270,6 +318,7 @@
     </div>
   </div>
 
+  <!-- Footer Section -->
   <footer class="main-footer">
     <div class="footer-container">
       
